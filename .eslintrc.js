@@ -6,5 +6,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'eslint-config-prettier',
   ],
-  rules: {},
+  rules: {
+    "@typescript-eslint/no-explicit-any": "off"
+  },
 }
