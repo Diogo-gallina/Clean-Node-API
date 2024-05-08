@@ -48,6 +48,10 @@ const makeSut = (): SutTypes => {
   }
 }
 
+beforeEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('DbAddAccount Usecase', () => {
   it('Should call Encripter with correct password', async () => {
     const { sut, encrypterStub } = makeSut()
