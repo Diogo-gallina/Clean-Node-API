@@ -10,6 +10,9 @@ export const makeSignUpController = (): SignUpController => {
   const bcryptAdapter = new BcryptAdapter(salt)
   const accountMongoReṕository = new AccountMongoRepository()
   const dbAddAccount = new DbAddAccount(bcryptAdapter, accountMongoReṕository)
-  const signupController = new SignUpController(emailValidatorAdapter, dbAddAccount)
+  const signupController = new SignUpController(
+    emailValidatorAdapter,
+    dbAddAccount,
+  )
   return signupController
 }

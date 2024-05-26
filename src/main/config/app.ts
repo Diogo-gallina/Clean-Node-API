@@ -7,4 +7,3 @@ setupMiddlewares(app)
 setupRoutes(app)
 
 export default app
-
