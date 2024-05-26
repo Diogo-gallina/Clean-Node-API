@@ -5,8 +5,11 @@ module.exports = {
     'standard',
     'plugin:@typescript-eslint/recommended',
     'eslint-config-prettier',
+    'prettier',
+    'plugin:prettier/recommended',
   ],
   rules: {
-    "@typescript-eslint/no-explicit-any": "off"
+    '@typescript-eslint/no-explicit-any': 'off',
+    'prettier/prettier': 'error',
   },
 }

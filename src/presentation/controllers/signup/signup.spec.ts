@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { InvalidParamError, MissingParamError, ServerError } from "../../errors"
-import { SignUpController } from "./signup"
-import { AccountModel, AddAccount, AddAccountModel, EmailValidator } from "./signup-protocols"
+import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
+import { SignUpController } from './signup'
+import {
+  AccountModel,
+  AddAccount,
+  AddAccountModel,
+  EmailValidator,
+} from './signup-protocols'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -29,7 +34,7 @@ const makeAddAccount = (): AddAccount => {
 
 interface SutTypes {
   sut: SignUpController
-  emailValidatorStub: EmailValidator,
+  emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
 }
 
@@ -155,7 +160,7 @@ describe('SingUp Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
-   })
+    })
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -191,7 +196,7 @@ describe('SingUp Controller', () => {
   it('Should return 500 if AddAccount throws', async () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
-       return new Promise((resolve, reject) => reject(new Error()))
+      return new Promise((resolve, reject) => reject(new Error()))
     })
     const httpRequest = {
       body: {
@@ -207,7 +212,7 @@ describe('SingUp Controller', () => {
   })
 
   it('Should return 200 if valid data is provided', async () => {
-    const {sut} = makeSut()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'any_name',

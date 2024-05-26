@@ -3,17 +3,17 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from 'jest'
 
 const config: Config = {
   roots: ['<rootDir>/src'],
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
-  coverageDirectory: "coverage",
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts', '!<rootDir>/src/main/**'],
+  coverageDirectory: 'coverage',
   testEnvironment: 'node',
   preset: '@shelf/jest-mongodb',
   transform: {
-    '.+\\.ts$': 'ts-jest'
-  }
-};
+    '.+\\.ts$': 'ts-jest',
+  },
+}
 
-export default config;
+export default config
