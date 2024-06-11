@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   HttpRequest,
