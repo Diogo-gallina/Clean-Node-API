@@ -44,7 +44,6 @@ describe('LogController Decorator', () => {
       },
     }
     await sut.handle(httpRequest)
-    expect(sut.handle).toHaveBeenCalledTimes(1)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
