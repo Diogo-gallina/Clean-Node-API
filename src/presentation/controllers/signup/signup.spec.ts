@@ -6,6 +6,7 @@ import {
   AddAccount,
   AddAccountModel,
   EmailValidator,
+  HttpRequest,
 } from './signup-protocols'
 
 const makeEmailValidator = (): EmailValidator => {
@@ -31,6 +32,15 @@ const makeAddAccount = (): AddAccount => {
   }
   return new AddAccountStub()
 }
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any_name',
+    email: 'invalid_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+})
 
 interface SutTypes {
   sut: SignUpController
@@ -128,14 +138,7 @@ describe('SingUp Controller', () => {
   it('Should return 400 if a invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'invalid_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
     expect(httpResponde.statusCode).toBe(400)
     expect(httpResponde.body).toEqual(new InvalidParamError('email'))
@@ -144,14 +147,7 @@ describe('SingUp Controller', () => {
   it('Should call EmailValidator with correct email', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
@@ -161,14 +157,7 @@ describe('SingUp Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
     expect(httpResponde.statusCode).toBe(500)
     expect(httpResponde.body).toEqual(new ServerError())
@@ -177,14 +166,7 @@ describe('SingUp Controller', () => {
   it('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith({
       name: 'any_name',
@@ -198,14 +180,7 @@ describe('SingUp Controller', () => {
     jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
       return new Promise((resolve, reject) => reject(new Error()))
     })
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
     expect(httpResponde.statusCode).toBe(500)
     expect(httpResponde.body).toEqual(new ServerError())
@@ -213,14 +188,7 @@ describe('SingUp Controller', () => {
 
   it('Should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'invalid_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
     expect(httpResponde.statusCode).toBe(200)
     expect(httpResponde.body).toEqual({
