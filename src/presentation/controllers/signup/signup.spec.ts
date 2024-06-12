@@ -8,6 +8,7 @@ import {
   EmailValidator,
   HttpRequest,
 } from './signup-protocols'
+import { ok, serverError, badRequest } from '../../helper/http-helper'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -71,8 +72,7 @@ describe('SingUp Controller', () => {
       },
     }
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(400)
-    expect(httpResponde.body).toEqual(new MissingParamError('name'))
+    expect(httpResponde).toEqual(badRequest(new MissingParamError('name')))
   })
 
   it('Should return 400 if no email is provided', async () => {
@@ -85,8 +85,7 @@ describe('SingUp Controller', () => {
       },
     }
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(400)
-    expect(httpResponde.body).toEqual(new MissingParamError('email'))
+    expect(httpResponde).toEqual(badRequest(new MissingParamError('email')))
   })
 
   it('Should return 400 if no password is provided', async () => {
@@ -99,8 +98,7 @@ describe('SingUp Controller', () => {
       },
     }
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(400)
-    expect(httpResponde.body).toEqual(new MissingParamError('password'))
+    expect(httpResponde).toEqual(badRequest(new MissingParamError('password')))
   })
 
   it('Should return 400 if no password confirmation is provided', async () => {
@@ -113,9 +111,8 @@ describe('SingUp Controller', () => {
       },
     }
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(400)
-    expect(httpResponde.body).toEqual(
-      new MissingParamError('passwordConfirmation'),
+    expect(httpResponde).toEqual(
+      badRequest(new MissingParamError('passwordConfirmation')),
     )
   })
 
@@ -130,9 +127,8 @@ describe('SingUp Controller', () => {
       },
     }
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(400)
-    expect(httpResponde.body).toEqual(
-      new InvalidParamError('passwordConfirmation'),
+    expect(httpResponde).toEqual(
+      badRequest(new InvalidParamError('passwordConfirmation')),
     )
   })
 
@@ -141,8 +137,7 @@ describe('SingUp Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(400)
-    expect(httpResponde.body).toEqual(new InvalidParamError('email'))
+    expect(httpResponde).toEqual(badRequest(new InvalidParamError('email')))
   })
 
   it('Should call EmailValidator with correct email', async () => {
@@ -160,8 +155,7 @@ describe('SingUp Controller', () => {
     })
     const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(500)
-    expect(httpResponde.body).toEqual(new ServerError())
+    expect(httpResponde).toEqual(serverError(new ServerError()))
   })
 
   it('Should call AddAccount with correct values', async () => {
@@ -183,15 +177,13 @@ describe('SingUp Controller', () => {
     })
     const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(500)
-    expect(httpResponde.body).toEqual(new ServerError())
+    expect(httpResponde).toEqual(serverError(new ServerError()))
   })
 
   it('Should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
-    expect(httpResponde.statusCode).toBe(200)
-    expect(httpResponde.body).toEqual(makeFakeAccount())
+    expect(httpResponde).toEqual(ok(makeFakeAccount()))
   })
 })
