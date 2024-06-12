@@ -21,22 +21,23 @@ const makeEmailValidator = (): EmailValidator => {
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     async add(account: AddAccountModel): Promise<AccountModel> {
-      const fakeAccount = {
-        id: 'valid_id',
-        name: 'valid_name',
-        email: 'valid_email@mail.com',
-        password: 'valid_password',
-      }
-      return new Promise(resolve => resolve(fakeAccount))
+      return new Promise(resolve => resolve(makeFakeAccount()))
     }
   }
   return new AddAccountStub()
 }
 
+const makeFakeAccount = (): AccountModel => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid_email@mail.com',
+  password: 'valid_password',
+})
+
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: 'any_name',
-    email: 'invalid_email@mail.com',
+    email: 'any_email@mail.com',
     password: 'any_password',
     passwordConfirmation: 'any_password',
   },
@@ -191,11 +192,6 @@ describe('SingUp Controller', () => {
     const httpRequest = makeFakeRequest()
     const httpResponde = await sut.handle(httpRequest)
     expect(httpResponde.statusCode).toBe(200)
-    expect(httpResponde.body).toEqual({
-      id: 'valid_id',
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      password: 'valid_password',
-    })
+    expect(httpResponde.body).toEqual(makeFakeAccount())
   })
 })
