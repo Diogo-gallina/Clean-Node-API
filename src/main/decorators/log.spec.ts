@@ -8,6 +8,15 @@ import { LogControllerDecorator } from './log'
 import { serverError } from '../../presentation/helper/http-helper'
 import { LogErrorRepository } from '../../data/protocols/log-error-repository'
 
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+})
+
 interface SutTypes {
   sut: LogControllerDecorator
   controllerStub: Controller
@@ -49,28 +58,14 @@ describe('LogController Decorator', () => {
   it('Should call controller handle', async () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   it('Should return the same result the of the controller', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual({
       statusCode: 200,
@@ -89,14 +84,7 @@ describe('LogController Decorator', () => {
     jest
       .spyOn(controllerStub, 'handle')
       .mockReturnValueOnce(new Promise(resolve => resolve(error)))
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(logSpy).toHaveBeenCalledWith('any_stack')
   })
