@@ -89,6 +89,7 @@ describe('LogController Decorator', () => {
       )
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
+    expect(logSpy).toHaveBeenCalledTimes(1)
     expect(logSpy).toHaveBeenCalledWith('any_stack')
   })
 })
