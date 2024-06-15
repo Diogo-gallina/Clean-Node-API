@@ -68,6 +68,7 @@ describe('LogController Decorator', () => {
     const handleSpy = jest.spyOn(controllerStub, 'handle')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
+    expect(handleSpy).toHaveBeenCalledTimes(1)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
