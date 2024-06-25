@@ -8,8 +8,6 @@ import {
 } from '../../helper/http-helper'
 import { EmailValidator, HttpRequest, Authentication } from './login-protocols'
 import { LoginController } from './login'
-import { rejects } from 'assert'
-import { resolve } from 'path'
 
 interface sutTypes {
   sut: LoginController
@@ -119,9 +117,7 @@ describe('Login Controller', () => {
     const { sut, authenticationStub } = makeSut()
     jest
       .spyOn(authenticationStub, 'auth')
-      .mockReturnValueOnce(
-        new Promise((resolve, reject) => reject(new Error())),
-      )
+      .mockReturnValueOnce(Promise.reject(new Error()))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
