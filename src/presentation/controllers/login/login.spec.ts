@@ -54,7 +54,7 @@ const makeSut = (): sutTypes => {
 }
 
 describe('Login Controller', () => {
-  it('Shouls return 400 if no email is provided', async () => {
+  it('Shouls returns 400 if no email is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -65,7 +65,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
   })
 
-  it('Shouls return 400 if no password is provided', async () => {
+  it('Shouls returns 400 if no password is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -76,7 +76,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('password')))
   })
 
-  it('Shouls return 400 if an invalid email is provided', async () => {
+  it('Shouls returns 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpResponse = await sut.handle(makeFakeRequest())
@@ -90,7 +90,7 @@ describe('Login Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
 
-  it('Shouls return 500 if EmailValidator throws', async () => {
+  it('Shouls returns 500 if EmailValidator throws', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
@@ -106,16 +106,16 @@ describe('Login Controller', () => {
     expect(authSpy).toHaveBeenCalledWith('any_email@mail.com', 'any_password')
   })
 
-  it('Shouls return 401 if invalid credentials are provided', async () => {
+  it('Shouls returns 401 if invalid credentials are provided', async () => {
     const { sut, authenticationStub } = makeSut()
     jest
       .spyOn(authenticationStub, 'auth')
-      .mockReturnValueOnce(new Promise(resolve => resolve(null)))
+      .mockReturnValueOnce(Promise.resolve(null) as unknown as Promise<string>)
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(unauthorized())
   })
 
-  it('Shouls return 500 if Authentication throws', async () => {
+  it('Shouls returns 500 if Authentication throws', async () => {
     const { sut, authenticationStub } = makeSut()
     jest
       .spyOn(authenticationStub, 'auth')
@@ -126,7 +126,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
-  it('Shouls return 200 if valid credentials are provided', async () => {
+  it('Shouls returns 200 if valid credentials are provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
