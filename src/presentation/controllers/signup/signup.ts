@@ -8,6 +8,7 @@ import {
   HttpResponse,
   Validation,
 } from './signup-protocols'
+import e from 'express'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
@@ -26,7 +27,8 @@ export class SignUpController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validation.validate(httpRequest)
+      const error = this.validation.validate(httpRequest)
+      if (error) return badRequest(error)
       const requiredFields = [
         'name',
         'email',
