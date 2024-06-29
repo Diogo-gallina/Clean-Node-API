@@ -10,14 +10,10 @@ import {
 } from './signup-protocols'
 
 export class SignUpController implements Controller {
-  private readonly emailValidator: EmailValidator
-  private readonly addAccount: AddAccount
-  private readonly validation: Validation
-
   constructor(
-    emailValidator: EmailValidator,
-    addAccount: AddAccount,
-    validation: Validation,
+    private readonly emailValidator: EmailValidator,
+    private readonly addAccount: AddAccount,
+    private readonly validation: Validation,
   ) {
     this.emailValidator = emailValidator
     this.addAccount = addAccount
