@@ -8,7 +8,6 @@ import {
   HttpResponse,
   Validation,
 } from './signup-protocols'
-import e from 'express'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
