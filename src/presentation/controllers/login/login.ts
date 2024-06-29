@@ -14,10 +14,10 @@ import {
 } from './login-protocols'
 
 export class LoginController implements Controller {
-  private readonly emailValidator: EmailValidator
-  private readonly authentication: Authentication
-
-  constructor(emailValidator: EmailValidator, authentication: Authentication) {
+  constructor(
+    private readonly emailValidator: EmailValidator,
+    private readonly authentication: Authentication,
+  ) {
     this.emailValidator = emailValidator
     this.authentication = authentication
   }
