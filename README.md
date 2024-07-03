@@ -1,5 +1,5 @@
-#Clean Node - API
-
+# Clean Node - API
+Dedicated API for clean architecture studies and test-driven development (TDD)
 
 ### 🤝 Contributors
 
